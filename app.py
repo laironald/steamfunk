@@ -37,7 +37,7 @@ def convert_to_csv(files):
                     outfile.writerow(data)
 
 
-def reformat_data(files):
+def reformat_data_into_db(files):
     session = lib.fetch_session()
 
     for infile in files:
@@ -89,10 +89,9 @@ def reformat_data(files):
                 user.actions.append(lib.UserAction(**action))
             session.merge(user)
 
-            if (k + 1) % 1000 == 0:
+            if (k + 1) % 5000 == 0:
                 print " *", k + 1, datetime.now()
                 session.merge(user)
-                break
         session.commit()
 
 
@@ -103,4 +102,4 @@ if __name__ == '__main__':
     else:
         files = glob.glob("{path}/*.{extension}".format(**config.get("input")))
     convert_to_csv(files)
-    reformat_data(files)
+    reformat_data_into_db(files)

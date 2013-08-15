@@ -25,8 +25,10 @@ class User(Base):
     vizume_type = Column(String(45))
     origin = Column(String(45))
     name = Column(Unicode(128))
+    name_first = Column(Unicode(64))
+    name_last = Column(Unicode(64))
     sign_in_count = Column(Integer)
-    location = Column(String(128))
+    location = Column(Unicode(128))
     auth_count = Column(Integer)
     linkedin = Column(String(45))
     facebook = Column(String(45))
@@ -39,6 +41,23 @@ class User(Base):
     updated_at = Column(DateTime)
     last_sign_in_at = Column(DateTime)
 
+    actions = relationship("UserAction", backref="user")
+
+
+class UserAction(Base):
+    __tablename__ = 'useraction'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(String(45), ForeignKey(User.id))
+    date_first = Column(DateTime)
+    date_last = Column(DateTime)
+    count = Column(Integer)
+    action = Column(String(45))
+
+"""
+class UserStuff(Base):
+    __tablename__ = 'userstuff'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(String(45), ForeignKey(User.id))
     share_follow_me_video_count = Column(Integer)
     share_follow_me_video_first_used_at = Column(DateTime)
     share_follow_me_video_last_used_at = Column(DateTime)
@@ -134,3 +153,4 @@ class User(Base):
     share_connections_friends_count = Column(Integer)
     share_connections_friends_first_used_at = Column(DateTime)
     share_connections_friends_last_used_at = Column(DateTime)
+"""

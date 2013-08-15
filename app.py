@@ -41,7 +41,8 @@ def convert_to_csv(files):
                     header = row.split('\\t')
                     outfile.writerow(header)
             else:
-                outfile.writerow(row.split("\t"))
+                if row.count("\t") > 10:
+                    outfile.writerow(row.split("\t"))
 
 
 if __name__ == '__main__':

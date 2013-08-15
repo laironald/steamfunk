@@ -21,8 +21,7 @@ def get_config(localfile="config.ini"):
         cfg.read(openfile)
         for s in cfg.sections():
             for k, v in cfg.items(s):
-                dec = re.compile('\d+(\.\d+)?')
-                if v in ("True", "False") or v.isdigit() or dec.match(v):
+                if v in ("True", "False") or v.isdigit():
                     v = eval(v)
                 config[s][k] = v
     return config

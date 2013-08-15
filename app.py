@@ -42,7 +42,11 @@ def convert_to_csv(files):
                     outfile.writerow(header)
             else:
                 if row.count("\t") > 10:
-                    outfile.writerow(row.split("\t"))
+                    data = row.split("\t")
+                    data.pop(8)  # this item is weird (email sig cnt)
+                    if data[1] == "":  # if url is missing
+                        continue
+                    outfile.writerow(data)
 
 
 if __name__ == '__main__':

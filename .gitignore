@@ -1,4 +1,4 @@
 input/
 *.pyc
 *.db
-.DS-Store
+.DS_Store

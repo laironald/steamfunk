@@ -79,7 +79,7 @@ def reformat_data_into_db(files):
                         actions[-1].update({"date_last": item})
 
             user_id = user.pop("user_id")
-            if "name" in user:
+            if "name" in user and type(user["name"]).__name__ in ("str", "unicode"):
                 names = user["name"].split()
                 if len(names) >= 2:
                     user["name_first"] = names[0]

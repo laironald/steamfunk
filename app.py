@@ -3,6 +3,7 @@ import glob
 import sys
 import lib
 import os
+import unidecode
 from datetime import datetime
 
 
@@ -38,14 +39,17 @@ def reformat_data(files):
     session = lib.fetch_session()
 
     for infile in files:
+        print infile
         outfile = "{file}.{processed}".format(file=infile, processed=config.get("input").get("processed"))
         infile = csv.reader(open(outfile, "rb"))
 
         header = infile.next()
         header = [x.replace("-", "_") for x in header]
+        action_point = header.index("share_follow_me_video_count")
 
-        for row in infile:
-            data = {}
+        for k, row in enumerate(infile):
+            user = {}
+            actions = []
             for i, item in enumerate(row):
                 # convert to datevalues
                 if item is "" or item is None:
@@ -56,11 +60,37 @@ def reformat_data(files):
                     item = datetime.strptime(item, '%Y-%m-%d %H:%M:%S UTC')
                 elif item.isdigit():
                     item = int(item)
-                data[header[i]] = item
+                else:
+                    item = unidecode.unidecode(item)
 
-            user_id = data.pop("user_id")
-            user = lib.User(id=user_id, **data)
+                if i < action_point:
+                    user[header[i]] = item
+                else:
+                    if "_count" in header[i]:
+                        actions.append({
+                            "count": item,
+                            "action": header[i].replace("_count", "")
+                        })
+                    elif "_first_used_at" in header[i]:
+                        actions[-1].update({"date_first": item})
+                    elif "_last_used_at" in header[i]:
+                        actions[-1].update({"date_last": item})
+
+            user_id = user.pop("user_id")
+            if "name" in user:
+                names = user["name"].split()
+                if len(names) >= 2:
+                    user["name_first"] = names[0]
+                    user["name_last"] = names[-1]
+            user = lib.User(id=user_id, **user)
+            for action in actions:
+                user.actions.append(lib.UserAction(**action))
             session.merge(user)
+
+            if (k + 1) % 1000 == 0:
+                print " *", k + 1, datetime.now()
+                session.merge(user)
+                break
         session.commit()
 
 

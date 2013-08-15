@@ -47,3 +47,5 @@ def fetch_session():
     Session = sessionmaker(bind=engine)
     session = Session()
     return session
+
+session = fetch_session()

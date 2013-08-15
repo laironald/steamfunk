@@ -24,11 +24,12 @@ def reformat_data(header, row):
     print ""
 
 
-def data_clean(filename):
-    for infile in filename:
-        outfile = "{file}-{processed}".format(file=infile, processed=config.get("input").get("processed"))
+def convert_to_csv(files):
+    for infile in files:
+        outfile = "{file}.{processed}".format(file=infile, processed=config.get("input").get("processed"))
         if os.path.exists(outfile):
             continue
+        print " *", infile
         infile = open(infile, "rb")
         outfile = csv.writer(open(outfile, "wb"))
 
@@ -41,12 +42,12 @@ def data_clean(filename):
                     outfile.writerow(header)
             else:
                 outfile.writerow(row.split("\t"))
-                # reformat_data(header, row)
 
 
 if __name__ == '__main__':
     # this allows us to specify a list of files
     if len(sys.argv) > 1:
-        data_clean(sys.argv[1:])
+        files = sys.argv[1:]
     else:
-        data_clean(glob.glob("{path}/*.{extension}".format(**config.get("input"))))
+        files = glob.glob("{path}/*.{extension}".format(**config.get("input")))
+    convert_to_csv(files)

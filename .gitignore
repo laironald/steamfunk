@@ -1,4 +1,5 @@
 input/
+input_cred/
 *.pyc
 *.db
 *journal

@@ -61,6 +61,9 @@ class User(Base):
         primaryjoin="User.id == UserCred.user_id",
         backref="user")
 
+    def __repr__(self):
+        return "<User('{0}')>".format(self.name)
+
 
 class UserAction(Base):
     __tablename__ = 'useraction'
@@ -71,6 +74,9 @@ class UserAction(Base):
     count = Column(Integer)
     action = Column(String(45))
 
+    def __repr__(self):
+        return "<UserAction('{0} | {1}')>".format(self.user_id, self.action)
+
 
 class UserCred(Base):
     __tablename__ = 'usercred'
@@ -78,6 +84,9 @@ class UserCred(Base):
     user_id = Column(String(45), index=True)
     industry = Column(String(128))
     degree = Column(String(128))
+
+    def __repr__(self):
+        return "<UserCred('{0} | {1} {2}')>".format(self.user_id, self.industry, self.action)
 
 
 """

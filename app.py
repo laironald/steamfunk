@@ -120,7 +120,7 @@ def add_creds(files):
                 header = row
                 continue
             if len(row) == 5:
-                if row[header.index("industry")] and row[header.index("degree")]:
+                if row[header.index("industry")] or row[header.index("degree")]:
                     cred = lib.UserCred(**{
                         "user_id": row[header.index("user_id")],
                         "industry": unidecode.unidecode(row[header.index("industry")]),
@@ -134,9 +134,9 @@ def add_creds(files):
 
 
 if __name__ == '__main__':
-    files = glob.glob("{path}/*.{extension}".format(**config.get("input")))
-    convert_to_csv(files)
-    reformat_data_into_db(files)
+    # files = glob.glob("{path}/*.{extension}".format(**config.get("input")))
+    # convert_to_csv(files)
+    # reformat_data_into_db(files)
 
     files = glob.glob("{path}_cred/*.{extension}".format(**config.get("input")))
     add_creds(files)

@@ -6,6 +6,7 @@ import sys
 import lib
 import os
 import unidecode
+import json
 from datetime import datetime
 
 
@@ -84,7 +85,7 @@ def reformat_data_into_db(files):
             loc = None
             if "location" in user:
                 location_id = user.pop("location")
-                loc = lib.Location(id=location_id.lower())
+                loc = lib.Location(id=location_id)
                 session.merge(loc)
 
             if "name" in user and type(user["name"]).__name__ in ("str", "unicode"):

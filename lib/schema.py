@@ -1,4 +1,3 @@
-from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, DateTime, String, Unicode, UnicodeText, Boolean, ForeignKey, Text, Float
 from sqlalchemy.orm import sessionmaker, relationship, backref
@@ -29,7 +28,7 @@ class User(Base):
     __tablename__ = 'user'
     id = Column(String(45), primary_key=True)
     location_id = Column(Unicode(128), ForeignKey(Location.id))
-    url = Column(String(45))
+    url = Column(String(64))
     total_view_13_05 = Column(Integer)
     overview_views_13_05 = Column(Integer)
     total_view_13_06 = Column(Integer)

@@ -3,6 +3,7 @@ import re
 import ConfigParser
 from collections import defaultdict
 from schema import *
+from sqlalchemy import create_engine
 
 
 def get_config(localfile="config.ini"):

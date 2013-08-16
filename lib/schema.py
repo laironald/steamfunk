@@ -56,9 +56,9 @@ class User(Base):
 
     actions = relationship("UserAction", backref="user")
     cred = relationship(
-        "UserAction", uselist=False,
-        foreign_keys="UserAction.user_id",
-        primaryjoin="User.id == UserAction.user_id",
+        "UserCred", uselist=False,
+        foreign_keys="UserCred.user_id",
+        primaryjoin="User.id == UserCred.user_id",
         backref="user")
 
 
@@ -75,7 +75,9 @@ class UserAction(Base):
 class UserCred(Base):
     __tablename__ = 'usercred'
     id = Column(Integer, primary_key=True)
-    user_id = Column(String(45), ForeignKey(User.id))
+    user_id = Column(String(45), index=True)
+    industry = Column(String(128))
+    degree = Column(String(128))
 
 
 """

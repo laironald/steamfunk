@@ -104,16 +104,39 @@ def reformat_data_into_db(files):
 
             if (k + 1) % 5000 == 0:
                 print " *", k + 1, datetime.now()
-                session.merge(user)
+                session.commit()
+        session.commit()
+
+
+def add_creds(files):
+    # tsv file
+    # user_id, first_name, last_name, industry, degree
+    session = lib.fetch_session()
+    for infile in files:
+        print infile
+        for k, row in enumerate(open(infile, "rb")):
+            row = row.replace("\n", "").split("\t")
+            if k == 0:
+                header = row
+                continue
+            if len(row) == 5:
+                if row[header.index("industry")] and row[header.index("degree")]:
+                    cred = lib.UserCred(**{
+                        "user_id": row[header.index("user_id")],
+                        "industry": unidecode.unidecode(row[header.index("industry")]),
+                        "degree": unidecode.unidecode(row[header.index("degree")])})
+                    session.merge(cred)
+
+            if (k + 1) % 5000 == 0:
+                print " *", k + 1, datetime.now()
                 session.commit()
         session.commit()
 
 
 if __name__ == '__main__':
-    # this allows us to specify a list of files
-    if len(sys.argv) > 1:
-        files = sys.argv[1:]
-    else:
-        files = glob.glob("{path}/*.{extension}".format(**config.get("input")))
+    files = glob.glob("{path}/*.{extension}".format(**config.get("input")))
     convert_to_csv(files)
     reformat_data_into_db(files)
+
+    files = glob.glob("{path}_cred/*.{extension}".format(**config.get("input")))
+    add_creds(files)

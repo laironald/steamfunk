@@ -6,6 +6,7 @@ import sys
 sys.path.append(os.path.join(
     os.path.dirname(os.path.realpath(__file__)),
     ".."))
+import lib
 from lib import drillbit
 
 
@@ -17,8 +18,31 @@ class TestDrillBit(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_(self):
-        pass
+    def test_drill(self):
+        data = {"firstnames": "Darling", "lastnames": "Sanders"}
+        self.assertItemsEqual(
+            [u'skippedLastNames', u'gender', u'age', u'skippedFirstNames', u'totalLastNames', u'race', u'matchedFirstNames', u'matchedLastNames', u'totalFirstNames'],
+            drillbit.drill(data).keys())
+
+    def test_retrieve_names(self):
+        # passing in the User class
+        user = lib.session.query(lib.User).filter(lib.User.id == '137').first()
+        self.assertItemsEqual(
+            [u'Jesse', u'Yates'],
+            drillbit.retrieve_names(user))
+
+        # passing in User parsed by first/last
+        user = lib.session.query(lib.User.name_first, lib.User.name_last).filter(lib.User.id == '137').first()
+        self.assertItemsEqual(
+            [u'Jesse', u'Yates'],
+            drillbit.retrieve_names(user))
+
+        # passing in an array
+        user = ["Todd", "Silverstein"]
+        self.assertItemsEqual(
+            [u'Todd', u'Silverstein'],
+            drillbit.retrieve_names(user))
+
 
 if __name__ == '__main__':
     unittest.main()

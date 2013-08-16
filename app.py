@@ -60,7 +60,7 @@ def reformat_data_into_db(files):
                     item = datetime.strptime(item, '%Y-%m-%d %H:%M:%S +0000')
                 elif item[-3:] == "UTC" and len(item) < 30:
                     item = datetime.strptime(item, '%Y-%m-%d %H:%M:%S UTC')
-                elif item.isdigit():
+                elif item.isdigit() and len(item) < 10:
                     item = int(item)
                 else:
                     item = unidecode.unidecode(item)
@@ -79,19 +79,32 @@ def reformat_data_into_db(files):
                         actions[-1].update({"date_last": item})
 
             user_id = user.pop("user_id")
+
+            # adding location
+            loc = None
+            if "location" in user:
+                location_id = user.pop("location")
+                loc = lib.Location(id=location_id.lower())
+                session.merge(loc)
+
             if "name" in user and type(user["name"]).__name__ in ("str", "unicode"):
                 names = user["name"].split()
                 if len(names) >= 2:
                     user["name_first"] = names[0]
                     user["name_last"] = names[-1]
+
             user = lib.User(id=user_id, **user)
             for action in actions:
                 user.actions.append(lib.UserAction(**action))
+            if loc:
+                user.location = loc
+
             session.merge(user)
 
             if (k + 1) % 5000 == 0:
                 print " *", k + 1, datetime.now()
                 session.merge(user)
+                session.commit()
         session.commit()
 
 

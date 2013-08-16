@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, DateTime, String, Unicode, UnicodeText, Boolean, ForeignKey, Text
+from sqlalchemy import Column, Integer, DateTime, String, Unicode, UnicodeText, Boolean, ForeignKey, Text, Float
 from sqlalchemy.orm import sessionmaker, relationship, backref
 from sqlalchemy.sql import exists
 
@@ -11,9 +11,24 @@ Define Tables:
 Base = declarative_base()
 
 
+class Location(Base):
+    __tablename__ = 'location'
+    id = Column(Unicode(128), primary_key=True)
+    admin1 = Column(String(45))
+    admin2 = Column(String(45))
+    country = Column(String(45))
+    longitude = Column(Float)
+    latitude = Column(Float)
+    results = Column(Integer)
+    values = Column(UnicodeText)
+
+    users = relationship("User", backref="location")
+
+
 class User(Base):
     __tablename__ = 'user'
     id = Column(String(45), primary_key=True)
+    location_id = Column(Unicode(128), ForeignKey(Location.id))
     url = Column(String(45))
     total_view_13_05 = Column(Integer)
     overview_views_13_05 = Column(Integer)
@@ -28,7 +43,6 @@ class User(Base):
     name_first = Column(Unicode(64))
     name_last = Column(Unicode(64))
     sign_in_count = Column(Integer)
-    location = Column(Unicode(128))
     auth_count = Column(Integer)
     linkedin = Column(String(45))
     facebook = Column(String(45))

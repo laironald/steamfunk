@@ -37,18 +37,24 @@ def prep_names(names, sample=1000, seed=20130812):
     random.seed(seed)
     # we do this if sampling makes sense
     if sample and size > sample:
-        print size, sample
         samp = random.sample(xrange(size), sample)
     else:
         samp = None
 
-    for i, name in enumerate(names):
-        if samp and i not in samp:
-            continue
-        name = retrieve_names(name)
-        if name[0] and name[1]:
-            firstnames.append(name[0])
-            lastnames.append(name[1])
+    if type(names).__name__ == "Query":
+        for item in samp:
+            name = retrieve_names(names.offset(item).first())
+            if name[0] and name[1]:
+                firstnames.append(name[0])
+                lastnames.append(name[1])
+    else:
+        for i, name in enumerate(names):
+            if samp and i not in samp:
+                continue
+            name = retrieve_names(name)
+            if name[0] and name[1]:
+                firstnames.append(name[0])
+                lastnames.append(name[1])
 
     return {
         "firstnames": ",".join(firstnames),

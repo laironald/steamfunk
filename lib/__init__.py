@@ -1,5 +1,4 @@
 import os
-import re
 import ConfigParser
 from collections import defaultdict
 from schema import *

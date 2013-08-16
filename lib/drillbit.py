@@ -41,7 +41,7 @@ def prep_names(names, sample=1000, seed=20130812):
     else:
         samp = None
 
-    if type(names).__name__ == "Query":
+    if samp and type(names).__name__ == "Query":
         for item in samp:
             name = retrieve_names(names.offset(item).first())
             if name[0] and name[1]:

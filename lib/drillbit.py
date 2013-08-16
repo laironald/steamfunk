@@ -22,6 +22,10 @@ def retrieve_names(name):
 
 
 def prep_names(names, sample=1000, seed=20130812):
+    """
+    Throw this first to prepare the names
+    then throw it into drill!
+    """
     firstnames = []
     lastnames = []
     if type(names).__name__ == "Query":

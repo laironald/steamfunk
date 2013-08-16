@@ -25,7 +25,11 @@ def prep_names(names, sample=1000, seed=20130812):
     firstnames = []
     lastnames = []
     if type(names).__name__ == "Query":
-        names = names.filter(lib.User.name_first is not None)
+        try:
+            # might not be possible but if it is. do it!
+            names = names.filter(lib.User.name_first is not None)
+        except:
+            pass
         size = names.count()
     elif type(names).__name__ in ("list", "tuple"):
         size = len(names)
@@ -42,8 +46,9 @@ def prep_names(names, sample=1000, seed=20130812):
         if samp and i not in samp:
             continue
         name = retrieve_names(name)
-        firstnames.append(name[0])
-        lastnames.append(name[1])
+        if name[0] and name[1]:
+            firstnames.append(name[0])
+            lastnames.append(name[1])
 
     return {
         "firstnames": ",".join(firstnames),

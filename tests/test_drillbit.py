@@ -43,6 +43,9 @@ class TestDrillBit(unittest.TestCase):
             [u'Todd', u'Silverstein'],
             drillbit.retrieve_names(user))
 
+    def test_prep_names(self):
+        names = lib.session.query(lib.User).limit(100)
+        print drillbit.prep_names(names, sample=10, seed=5)
 
 if __name__ == '__main__':
     unittest.main()

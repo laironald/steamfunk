@@ -55,6 +55,11 @@ class User(Base):
     last_sign_in_at = Column(DateTime)
 
     actions = relationship("UserAction", backref="user")
+    cred = relationship(
+        "UserAction", uselist=False,
+        foreign_keys="UserAction.user_id",
+        primaryjoin="User.id == UserAction.user_id",
+        backref="user")
 
 
 class UserAction(Base):
@@ -65,6 +70,13 @@ class UserAction(Base):
     date_last = Column(DateTime)
     count = Column(Integer)
     action = Column(String(45))
+
+
+class UserCred(Base):
+    __tablename__ = 'usercred'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(String(45), ForeignKey(User.id))
+
 
 """
 class UserStuff(Base):

@@ -86,7 +86,7 @@ class UserCred(Base):
     degree = Column(String(128))
 
     def __repr__(self):
-        return "<UserCred('{1}, {2}')>".format(self.user_id, self.industry, self.action)
+        return "<UserCred('{0}, {1}')>".format(self.industry, self.degree)
 
 
 """

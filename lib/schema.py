@@ -75,7 +75,7 @@ class UserAction(Base):
     action = Column(String(45))
 
     def __repr__(self):
-        return "<UserAction('{0} | {1}')>".format(self.user_id, self.action)
+        return "<UserAction('{0}, {1}')>".format(self.action, self.count)
 
 
 class UserCred(Base):
@@ -86,7 +86,7 @@ class UserCred(Base):
     degree = Column(String(128))
 
     def __repr__(self):
-        return "<UserCred('{0} | {1} {2}')>".format(self.user_id, self.industry, self.action)
+        return "<UserCred('{1}, {2}')>".format(self.user_id, self.industry, self.action)
 
 
 """
